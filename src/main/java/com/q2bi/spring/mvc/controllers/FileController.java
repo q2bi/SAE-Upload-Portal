@@ -77,6 +77,11 @@ public class FileController {
 				// copy file to local disk (make sure the path "e.g. D:/temp/files" exists)
 				FileCopyUtils.copy(mpf.getBytes(), new FileOutputStream("/Users/chaoran/temp/"+mpf.getOriginalFilename()));
 				Boolean isPDF=extractionFromPDFAndInsertionToDatabase(filePath);
+				if(isPDF){
+					fileMeta.setFileStatus("Success! Now in database.");
+				}else{
+					fileMeta.setFileStatus("Rejected! Not a PDF.");
+				}
 	            //FileSystemUtils.deleteRecursively(File("/Users/chaoran/temp/"+mpf.getOriginalFilename()));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

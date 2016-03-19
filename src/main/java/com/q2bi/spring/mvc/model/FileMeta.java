@@ -8,6 +8,7 @@ public class FileMeta {
 	private String fileName;
 	private String fileSize;
 	private String fileType;
+	private String fileStatus;
 	private byte[] bytes;
 	
 	public String getFileName() {
@@ -33,5 +34,12 @@ public class FileMeta {
 	}
 	public void setBytes(byte[] bytes) {
 		this.bytes = bytes;
+	}
+	public String getFileStatus(){
+		return fileStatus;
+	}
+	public String setFileStatus(String fileStatus){
+		this.fileStatus = fileStatus;
+		return fileStatus;
 	}
 }
