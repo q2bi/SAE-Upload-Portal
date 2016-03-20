@@ -16,6 +16,24 @@
 <!-- we code these -->
 <link href="css/dropzone.css" type="text/css" rel="stylesheet" />
 <script src="js/myuploadfunction.js"></script>
+<script type = "text/javascript" language = "javascript">
+$(document).ready(function(){
+		    $.post("rest/controller/currentFiles",{}, function(result) {
+		    	alert(result);
+		    	$.each(result.reverse(), function (index, file) {
+		    		alert(file.fileNmae);
+	                $("#uploaded-files").append(
+	                		$('<tr/>')
+	                		.append($('<td/>').text(file.fileName))
+	                		.append($('<td/>').text(file.fileSize))
+	                		.append($('<td/>').text(file.fileType))
+	                		.append($('<td/>').html("<a href='"+file.fileLink+"'>Click</a>"))
+	                		.append($('<td/>').text(file.fileStatus))
+	                		)//end $("#uploaded-files").append()
+	            }); 
+		});
+  });
+</script>
 </head>
 
 <body>
@@ -33,7 +51,7 @@
 			<div id="progress" class="progress">
 		    	<div class="bar" style="width:0%;"></div>
 			</div>
-		
+			
 			<table id="uploaded-files" class="table">
 				<tr>
 					<th>File Name</th>

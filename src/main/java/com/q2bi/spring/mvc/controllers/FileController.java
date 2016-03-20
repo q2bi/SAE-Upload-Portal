@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.AcroFields;
@@ -35,7 +36,7 @@ import java.sql.Statement;
 public class FileController {
 
 	
-	LinkedList<FileMeta> files = new LinkedList<FileMeta>();
+	protected LinkedList<FileMeta> files = new LinkedList<FileMeta>();
 	
 	/***************************************************
 	 * URL: /rest/controller/upload  
@@ -52,7 +53,7 @@ public class FileController {
 		//1. build an iterator
 		 Iterator<String> itr =  request.getFileNames();
 		 MultipartFile mpf = null;
-
+		 int index = files.size();
 		 //2. get each file
 		 while(itr.hasNext()){
 			 
@@ -70,7 +71,7 @@ public class FileController {
              fileMeta.setFileName(mpf.getOriginalFilename());
              fileMeta.setFileSize(mpf.getSize()/1024+" Kb");
              fileMeta.setFileType(mpf.getContentType());
-			 
+			 fileMeta.setFileLink("rest/controller/get/"+index);
 			 try {
 				fileMeta.setBytes(mpf.getBytes());
 				String filePath = "/Users/chaoran/temp/"+mpf.getOriginalFilename();
@@ -149,6 +150,15 @@ public class FileController {
         preparedStatement.executeUpdate();
         return true;
 	}
+	
+		
+	@RequestMapping(value="/currentFiles", method = {RequestMethod.GET, RequestMethod.POST})
+	public @ResponseBody LinkedList<FileMeta> homePage(HttpServletResponse response){
+		System.out.println("Getting Old files!!!!!!"+files.size());
+		return files;
+	}
+	
+	
 	/***************************************************
 	 * URL: /rest/controller/get/{value}
 	 * get(): get file as an attachment

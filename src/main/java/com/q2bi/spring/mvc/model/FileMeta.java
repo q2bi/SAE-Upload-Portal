@@ -8,7 +8,9 @@ public class FileMeta {
 	private String fileName;
 	private String fileSize;
 	private String fileType;
+	private String fileLink;
 	private String fileStatus;
+	//private String fileChangeTime;
 	private byte[] bytes;
 	
 	public String getFileName() {
@@ -35,6 +37,12 @@ public class FileMeta {
 	public void setBytes(byte[] bytes) {
 		this.bytes = bytes;
 	}
+	public String getFileLink() {
+		return fileLink;
+	}
+	public void setFileLink(String fileLink) {
+		this.fileLink = fileLink;
+	}
 	public String getFileStatus(){
 		return fileStatus;
 	}
@@ -42,4 +50,5 @@ public class FileMeta {
 		this.fileStatus = fileStatus;
 		return fileStatus;
 	}
+
 }
