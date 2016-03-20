@@ -71,17 +71,19 @@ public class FileController {
              fileMeta.setFileName(mpf.getOriginalFilename());
              fileMeta.setFileSize(mpf.getSize()/1024+" Kb");
              fileMeta.setFileType(mpf.getContentType());
-			 fileMeta.setFileLink("rest/controller/get/"+index);
+			 
 			 try {
 				fileMeta.setBytes(mpf.getBytes());
 				String filePath = "/Users/chaoran/temp/"+mpf.getOriginalFilename();
-				// copy file to local disk (make sure the path "e.g. D:/temp/files" exists)
-				FileCopyUtils.copy(mpf.getBytes(), new FileOutputStream("/Users/chaoran/temp/"+mpf.getOriginalFilename()));
-				Boolean isPDF=extractionFromPDFAndInsertionToDatabase(filePath);
+				Boolean isPDF=extractionFromPDFAndInsertionToDatabase(mpf.getBytes());
 				if(isPDF){
 					fileMeta.setFileStatus("Success! Now in database.");
+					fileMeta.setFileLink("<a href='rest/controller/get/"+index+"'>Click</a>");
+					// copy file to local disk (make sure the path "e.g. D:/temp/files" exists)
+					FileCopyUtils.copy(mpf.getBytes(), new FileOutputStream("/Users/chaoran/temp/"+mpf.getOriginalFilename()));
 				}else{
 					fileMeta.setFileStatus("Rejected! Not a PDF.");
+					fileMeta.setFileLink("N.A.");
 				}
 	            //FileSystemUtils.deleteRecursively(File("/Users/chaoran/temp/"+mpf.getOriginalFilename()));
 			} catch (IOException e) {
@@ -99,10 +101,10 @@ public class FileController {
  
 	}
 	
-	public boolean extractionFromPDFAndInsertionToDatabase(String filePath) throws IOException, SQLException, ClassNotFoundException{
+	public boolean extractionFromPDFAndInsertionToDatabase(byte[] pdfIn) throws IOException, SQLException, ClassNotFoundException{
 		PdfReader reader;
 		try{
-			reader= new PdfReader(filePath);
+			reader= new PdfReader(pdfIn);
 		}catch(InvalidPdfException e){
 			return false;
 		}
@@ -154,7 +156,6 @@ public class FileController {
 		
 	@RequestMapping(value="/currentFiles", method = {RequestMethod.GET, RequestMethod.POST})
 	public @ResponseBody LinkedList<FileMeta> homePage(HttpServletResponse response){
-		System.out.println("Getting Old files!!!!!!"+files.size());
 		return files;
 	}
 	
