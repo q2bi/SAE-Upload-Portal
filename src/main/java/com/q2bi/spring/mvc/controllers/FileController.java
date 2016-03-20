@@ -53,45 +53,41 @@ public class FileController {
 		//1. build an iterator
 		 Iterator<String> itr =  request.getFileNames();
 		 MultipartFile mpf = null;
-		 int index = files.size();
 		 //2. get each file
 		 while(itr.hasNext()){
 			 
-			 //2.1 get next MultipartFile
-             mpf = request.getFile(itr.next()); 
-             System.out.println(mpf.getOriginalFilename() +" uploaded! "+files.size());
- 
-             //2.2 if files > 10 remove the first from the list
-//             if(files.size() >= 10)
-//                 files.pop();
-             
-             //2.3 create new fileMeta
-             FileMeta fileMeta = null;
-             fileMeta = new FileMeta();
-             fileMeta.setFileName(mpf.getOriginalFilename());
-             fileMeta.setFileSize(mpf.getSize()/1024+" Kb");
-             fileMeta.setFileType(mpf.getContentType());
-			 
-			 try {
-				fileMeta.setBytes(mpf.getBytes());
-				String filePath = "/Users/chaoran/temp/"+mpf.getOriginalFilename();
-				Boolean isPDF=extractionFromPDFAndInsertionToDatabase(mpf.getBytes());
-				if(isPDF){
-					fileMeta.setFileStatus("Success! Now in database.");
-					fileMeta.setFileLink("<a href='rest/controller/get/"+index+"'>Click</a>");
-					// copy file to local disk (make sure the path "e.g. D:/temp/files" exists)
-					FileCopyUtils.copy(mpf.getBytes(), new FileOutputStream("/Users/chaoran/temp/"+mpf.getOriginalFilename()));
-				}else{
-					fileMeta.setFileStatus("Rejected! Not a PDF.");
-					fileMeta.setFileLink("N.A.");
+			 synchronized(this){
+				 //2.1 get next MultipartFile
+	             mpf = request.getFile(itr.next()); 
+	             System.out.println(mpf.getOriginalFilename() +" uploaded! "+files.size());
+	             //2.3 create new fileMeta
+	             FileMeta fileMeta = new FileMeta();
+	             fileMeta.setFileName(mpf.getOriginalFilename());
+	             fileMeta.setFileSize(mpf.getSize()/1024+" Kb");
+	             fileMeta.setFileType(mpf.getContentType());
+				 
+				 try {
+					fileMeta.setBytes(mpf.getBytes());
+					String filePath = "/Users/chaoran/temp/"+mpf.getOriginalFilename();
+					Boolean isPDF=extractionFromPDFAndInsertionToDatabase(mpf.getBytes());
+					if(isPDF){
+						fileMeta.setFileStatus("Success! Now in database.");
+						fileMeta.setFileLink("<a href='rest/controller/get/"+(files.size()+1)+"'>Click</a>");
+						// copy file to local disk (make sure the path "e.g. D:/temp/files" exists)
+						FileCopyUtils.copy(mpf.getBytes(), new FileOutputStream("/Users/chaoran/temp/"+mpf.getOriginalFilename()));
+					}else{
+						fileMeta.setFileStatus("Rejected! Not a PDF.");
+						fileMeta.setFileLink("N.A.");
+					}
+		            //FileSystemUtils.deleteRecursively(File("/Users/chaoran/temp/"+mpf.getOriginalFilename()));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-	            //FileSystemUtils.deleteRecursively(File("/Users/chaoran/temp/"+mpf.getOriginalFilename()));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			 //2.4 add to files
-			 files.add(fileMeta);
+				 
+				 //2.4 add to files
+				 files.add(fileMeta);
+			 }
 			 
 		 }
 		 
