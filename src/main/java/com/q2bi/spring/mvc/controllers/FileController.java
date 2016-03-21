@@ -9,27 +9,22 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.util.FileSystemUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.exceptions.InvalidPdfException;
 
 import com.q2bi.spring.mvc.model.FileMeta;
-import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 @Controller
 @RequestMapping("/controller")
@@ -68,7 +63,6 @@ public class FileController {
 				 
 				 try {
 					fileMeta.setBytes(mpf.getBytes());
-					String filePath = "/Users/chaoran/temp/"+mpf.getOriginalFilename();
 					Boolean isPDF=extractionFromPDFAndInsertionToDatabase(mpf.getBytes());
 					if(isPDF){
 						fileMeta.setFileStatus("Success! Now in database.");
@@ -112,9 +106,6 @@ public class FileController {
         Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/SAE_Report_Form?"
         		+ "user=root&password=8515111q");
 
-        // Statements allow to issue SQL queries to the database
-        Statement statement = connect.createStatement();
-        
         PreparedStatement preparedStatement = connect
                 .prepareStatement("insert into SAE_Report_Form.section0 values (default, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         preparedStatement.setString(1, fields.getField("Section0_AssignedCase#").toString());
