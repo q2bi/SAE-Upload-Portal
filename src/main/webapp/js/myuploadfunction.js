@@ -12,7 +12,7 @@ $(function () {
                 		.append($('<td/>').text(file.fileType))
                 		.append($('<td/>').html(file.fileLink))
                 		.append($('<td/>').text(file.fileStatus))
-                		.append($('<td/>').text(file.fileDateTime))
+                		.append($('<td/>').text(new Date(file.fileDate)))
                 		)//end $("#uploaded-files").append()
             }); 
         },

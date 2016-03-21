@@ -13,8 +13,7 @@ public class FileMeta {
 	private String fileType;
 	private String fileLink;
 	private String fileStatus;
-	private DateTime fileDateTime;
-	//private String fileChangeTime;
+	private Date fileDate;
 	private byte[] bytes;
 	
 	public String getFileName() {
@@ -54,11 +53,12 @@ public class FileMeta {
 		this.fileStatus = fileStatus;
 		return fileStatus;
 	}
-	public String getFileDateTime() {
-		return fileDateTime.toLocalDateTime().toDate().toLocaleString();
+	public Date getFileDate() {
+		return fileDate;
 	}
-	public void setFileDateTime(DateTime fileDateTime) {
-		this.fileDateTime = fileDateTime;
+	public void setFileDate(Date fileDate) {
+		this.fileDate = fileDate;
 	}
+
 
 }

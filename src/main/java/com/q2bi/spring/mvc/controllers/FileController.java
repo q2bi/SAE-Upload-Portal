@@ -2,6 +2,7 @@ package com.q2bi.spring.mvc.controllers;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -68,18 +69,14 @@ public class FileController {
 					Boolean isPDF=extractionFromPDFAndInsertionToDatabase(mpf.getBytes());
 					if(isPDF){
 						fileMeta.setFileStatus("Success! Now in database.");
-						fileMeta.setFileLink("<a href='rest/controller/get/"+(files.size()+1)+"'>Click</a>");
+						fileMeta.setFileLink("<a href='rest/controller/get/"+files.size()+"'>Click</a>");
 						// copy file to local disk (make sure the path "e.g. D:/temp/files" exists)
 						FileCopyUtils.copy(mpf.getBytes(), new FileOutputStream("/Users/chaoran/temp/"+mpf.getOriginalFilename()));
-						
-						DateTime dt = new DateTime();
-						DateTimeZone dtZone = DateTimeZone.forID("America/New_York");
-						DateTime dtus = dt.withZone(dtZone);
-						fileMeta.setFileDateTime(dtus);
+						fileMeta.setFileDate(new Date());
 					}else{
 						fileMeta.setFileStatus("Rejected! Not a PDF.");
 						fileMeta.setFileLink("N.A.");
-						fileMeta.setFileDateTime(null);
+						fileMeta.setFileDate(null);
 					}
 		            //FileSystemUtils.deleteRecursively(File("/Users/chaoran/temp/"+mpf.getOriginalFilename()));
 				} catch (IOException e) {
