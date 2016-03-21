@@ -3,7 +3,6 @@ package com.q2bi.spring.mvc.model;
 import java.util.Date;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.joda.time.DateTime;
 
 @JsonIgnoreProperties({"bytes"})
 public class FileMeta {
