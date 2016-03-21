@@ -1,6 +1,9 @@
 package com.q2bi.spring.mvc.model;
 
+import java.util.Date;
+
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.joda.time.DateTime;
 
 @JsonIgnoreProperties({"bytes"})
 public class FileMeta {
@@ -10,6 +13,7 @@ public class FileMeta {
 	private String fileType;
 	private String fileLink;
 	private String fileStatus;
+	private DateTime fileDateTime;
 	//private String fileChangeTime;
 	private byte[] bytes;
 	
@@ -49,6 +53,12 @@ public class FileMeta {
 	public String setFileStatus(String fileStatus){
 		this.fileStatus = fileStatus;
 		return fileStatus;
+	}
+	public String getFileDateTime() {
+		return fileDateTime.toLocalDateTime().toDate().toLocaleString();
+	}
+	public void setFileDateTime(DateTime fileDateTime) {
+		this.fileDateTime = fileDateTime;
 	}
 
 }

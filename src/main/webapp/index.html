@@ -27,6 +27,7 @@ $(document).ready(function(){
 	                		.append($('<td/>').text(file.fileType))
 	                		.append($('<td/>').html(file.fileLink))
 	                		.append($('<td/>').text(file.fileStatus))
+	                		.append($('<td/>').text(file.fileDateTime))
 	                		)//end $("#uploaded-files").append()
 	            }); 
 		});
@@ -57,6 +58,7 @@ $(document).ready(function(){
 					<th>File Type</th>
 					<th>Download</th>
 					<th>File Status</th>
+					<th>Upload DateTime</th>
 				</tr>
 			</table>
 		</div>

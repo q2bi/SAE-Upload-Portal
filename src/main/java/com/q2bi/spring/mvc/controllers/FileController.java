@@ -7,6 +7,8 @@ import java.util.LinkedList;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,9 +71,15 @@ public class FileController {
 						fileMeta.setFileLink("<a href='rest/controller/get/"+(files.size()+1)+"'>Click</a>");
 						// copy file to local disk (make sure the path "e.g. D:/temp/files" exists)
 						FileCopyUtils.copy(mpf.getBytes(), new FileOutputStream("/Users/chaoran/temp/"+mpf.getOriginalFilename()));
+						
+						DateTime dt = new DateTime();
+						DateTimeZone dtZone = DateTimeZone.forID("America/New_York");
+						DateTime dtus = dt.withZone(dtZone);
+						fileMeta.setFileDateTime(dtus);
 					}else{
 						fileMeta.setFileStatus("Rejected! Not a PDF.");
 						fileMeta.setFileLink("N.A.");
+						fileMeta.setFileDateTime(null);
 					}
 		            //FileSystemUtils.deleteRecursively(File("/Users/chaoran/temp/"+mpf.getOriginalFilename()));
 				} catch (IOException e) {
